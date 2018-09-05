@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<head>
+<title><ui:insert name="Usuarios">Usuarios</ui:insert></title>
+</head>
+
+<body>
+	<ui:composition template="/WEB-INF/templates/master.xhtml">
+		<ui:define name="content">
+
+			<h:form id="frm">
+				<h1>Usuarios</h1>
+
+				<p:panel>
+
+					<h:panelGrid id="pgb" columns="4" cellpadding="5">
+
+						<p:inputText id="txtBuscarUs" value="#{usuarioBean.buscar}"
+							placeholder="Buscar Usuarios" required="true" label="Text 1">
+						</p:inputText>
+						<p:message for="txtBuscarUs" />
+						<h:outputText value="#{usuarioBean.buscar}" />
+
+						<p:commandButton process="frm:txtBuscarUs"
+							update="@form" value="Buscar" />
+					</h:panelGrid>
+				</p:panel>
+
+				<!-- <h:panelGrid id="mpg" columns="3" cellpadding="10">
+					<p:inputText id="txtBuscarUs" placeholder="Buscar Usuarios"
+						required="true" label="Buscar" value="#{usuarioBean.buscar}" />
+					<p:commandButton value="Buscar" actionListener="#{usuarioBean.busqueda()}"
+						update="@form" />
+					<p:message for="txtBuscarUs" />
+				</h:panelGrid> -->
+
+				<p:dataTable id="dt" var="u" value="#{usuarioBean.usuarios}">
+					<p:column headerText="Nombre">
+						<h:outputText value="#{u.usuario}" />
+					</p:column>
+					<p:column headerText="Estado">
+						<h:outputText value="#{u.estado}" />
+					</p:column>
+					<p:column headerText="">
+						<p:commandButton value="Modificar" oncomplete="PF('wdlg').show()"
+							actionListener="#{usuarioBean.mostrarData(u)}" update="frm:dlg" />
+					</p:column>
+				</p:dataTable>
+
+				<p:dialog id="dlg"
+					header="Modificar Usuario: #{usuarioBean.us.usuario}"
+					widgetVar="wdlg" modal="true" resizable="false" draggable="true"
+					closeOnEscape="true">
+
+					<h:panelGrid id="pg" columns="2">
+						<h:panelGrid columns="2">
+							<h:outputText value="Usuario" />
+							<p:inputText value="#{usuarioBean.us.usuario}" />
+
+							<h:outputText value="Contraseña" />
+							<p:password value="#{usuarioBean.verificar}" />
+
+
+							<p:outputLabel for="pwd1" value="Nueva Contraseña: *" />
+							<p:password id="pwd1" value="#{usuarioBean.us.contrasena}"
+								match="pwd2" label="Password 1" required="true" />
+
+
+							<p:outputLabel for="pwd2" value="Repetir Contraseña" />
+							<p:password id="pwd2" value="#{usuarioBean.us.contrasena}"
+								label="Password 2" required="true" />
+						</h:panelGrid>
+						<h:panelGrid>
+							<p:commandButton value="Verificar"
+								actionListener="#{usuarioBean.verificar()}" update="pg" process="pg"/>
+						</h:panelGrid>
+
+						<p:commandButton value="Aceptar" actionListener="#{usuarioBean.modificar()}"
+							rendered="#{usuarioBean.verificado}" update="pg" />
+						<p:commandButton value="Cancelar" />
+					</h:panelGrid>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+package com.estebanposada.dao.impl;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import com.estebanposada.dao.IPublicacionDAO;
+import com.estebanposada.model.Persona;
+import com.estebanposada.model.Publicacion;
+import com.estebanposada.model.PublicadorSeguidor;
+
+public class PublicacionDAOImpl implements IPublicacionDAO, Serializable  {
+
+	@PersistenceContext(unitName = "blogPU")
+	private EntityManager em;
+	
+	@Override
+	public Integer registrar(Publicacion t) throws Exception {
+		int rpta = 0;
+		try {
+			em.persist(t);
+			em.flush(); // para retornar el id
+			// https://stackoverflow.com/questions/9649515/how-to-get-id-of-last-persisted-entity-using-jpa
+			rpta = t.getId();
+		} catch (Exception e) {
+			rpta = 0;
+		}
+
+		return rpta;
+	}
+
+	@Override
+	public Integer modificar(Publicacion t) throws Exception {
+		em.merge(t);
+		return t.getId();
+	}
+
+	@Override
+	public Integer eliminar(Publicacion t) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Publicacion> listar() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Publicacion listarPorId(Publicacion t) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Publicacion> listarPublicacionesPorPublicador(Persona publicador) throws Exception {
+		List<Publicacion> lista = new ArrayList<>();
+		try {
+			Query query = em.createQuery("FROM Publicacion p where p.publicador.idPersona =?1");
+			query.setParameter(1, publicador.getIdPersona());
+
+			lista = (List<Publicacion>) query.getResultList();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Publicacion> listarPublicacionesDeSeguidores(Persona per) {
+		List<PublicadorSeguidor> listaSeguidores = new ArrayList<>();
+		List<Publicacion> listaPublicaciones = new ArrayList<>();
+		try {
+			Query query = em.createQuery("FROM PublicadorSeguidor p where p.publicador.idPersona =?1");
+			query.setParameter(1, per.getIdPersona());
+
+			listaSeguidores = (List<PublicadorSeguidor>) query.getResultList();
+			
+			listaSeguidores.forEach(s -> {
+				Query q = em.createQuery("FROM Publicacion pu where pu.publicador.idPersona =?1");
+				q.setParameter(1, s.getSeguidor().getIdPersona());	
+				List<Publicacion> lista = (List<Publicacion>)q.getResultList();
+				listaPublicaciones.addAll(lista);
+			});								
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return listaPublicaciones;
+	}
+
+}

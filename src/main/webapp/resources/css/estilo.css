@@ -1,0 +1,13 @@
+/*Centra la pagina web*/
+.resolucion {
+	width: 800px;
+	margin: 0 auto;
+}
+
+.ui-widget {
+	font-size: 100% !important;
+}
+
+body {
+	font-family: Lato;
+}

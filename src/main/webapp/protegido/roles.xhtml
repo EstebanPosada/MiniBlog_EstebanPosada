@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/WEB-INF/templates/master.xhtml">
+
+		<ui:define name="content">
+
+			<h1>Roles</h1>
+			<h:form id="frm">
+				<p:growl id="msgs" showDetail="true" sticky="true" />
+				<p:commandButton value="Nuevo" onclick="PF('wdlg').show()" />
+
+				<p:dataTable id="dt" value="#{rolBean.lista}" var="e"
+					editable="true">
+					<p:ajax event="rowEdit" listener="#{rolBean.onRowEdit()}"
+						update="frm:msgs" />
+					<p:column headerText="ID">
+						<p:outputLabel value="#{e.id}" />
+					</p:column>
+
+					<p:column headerText="Rol">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{e.tipo}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{e.tipo}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column style="width:32px">
+						<p:rowEditor />
+					</p:column>
+
+					<p:column>
+						<p:commandLink value="Ver Rol"
+							actionListener="#{rolBean.verRol(e)}"
+							oncomplete="PF('wdlg').show()" update="frm:dlg" immediate="true" />
+					</p:column>
+
+				</p:dataTable>
+
+				<p:dialog id="dlg" widgetVar="wdlg" header="Nuevo Rol" modal="true"
+					resizable="false" draggable="true" closeOnEscape="true">
+					<!-- <p:ajax event="close" update="pg" resetValues="true" /> -->
+
+					<h:panelGrid id="pg" columns="3">
+						<p:outputLabel for="txtTipo" value="Tipo" />
+						<p:inputText id="txtTipo" required="true"
+							value="#{rolBean.rol.tipo}"
+							requiredMessage="El nombre del rol es necesario" />
+						<p:message for="txtTipo" />
+					</h:panelGrid>
+					<p:commandButton value="Registrar"
+						actionListener="#{rolBean.operar('R')}" update="frm:dt, pg"
+						oncomplete="if (args &amp;&amp; !args.validationFailed) PF('wdlg').hide()" />
+					<p:commandButton value="Modificar"
+						actionListener="#{rolBean.operar('M')}" />
+				</p:dialog>
+			</h:form>
+
+		</ui:define>
+
+	</ui:composition>
+
+</body>
+</html>
