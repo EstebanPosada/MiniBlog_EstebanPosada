@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
+import com.estebanposada.model.Persona;
 import com.estebanposada.model.Usuario;
 import com.estebanposada.service.IUsuarioService;
 
@@ -23,7 +24,16 @@ public class UsuarioBean implements Serializable {
 	private List<Usuario> usuarios;
 	private boolean verificado;
 	private String buscar;
-	private String verificar;
+	private String oldPass;
+	private String nuevoPass;
+
+	public String getNuevoPass() {
+		return nuevoPass;
+	}
+
+	public void setNuevoPass(String nuevoPass) {
+		this.nuevoPass = nuevoPass;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -47,15 +57,18 @@ public class UsuarioBean implements Serializable {
 	
 	public void busqueda() {
 		try {
-			this.usuarios = (List<Usuario>) usuarioService.listarPorUsuario(this.buscar);
-			
+			this.usuarios = (List<Usuario>) this.usuarioService.listarPorUsuario(this.buscar);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
+	public void limpiarControles() {
+		//this.us = new Usuario();
+	}
+	
 	public void verificar() {
-		this.verificado = this.usuarioService.verificar(this.verificar, this.us);
+		this.verificado = this.usuarioService.verificar(this.oldPass, this.us);
 	}
 	
 	public void modificar() {
@@ -98,12 +111,14 @@ public class UsuarioBean implements Serializable {
 		this.verificado = verificado;
 	}
 
-	public String getVerificar() {
-		return verificar;
+	public String getOldPass() {
+		return oldPass;
 	}
 
-	public void setVerificar(String verificar) {
-		this.verificar = verificar;
+	public void setOldPass(String oldPass) {
+		this.oldPass = oldPass;
 	}	
+	
+	
 
 }

@@ -19,25 +19,16 @@
 				<p:panel>
 
 					<h:panelGrid id="pgb" columns="4" cellpadding="5">
+					
+					<p:inputText id="txtBuscar" value="#{usuarioBean.buscar}" placeholder="Buscar Usuario" />
+					<p:message for="txtBuscar" />
+					<h:outputText value="#{usuarioBean.buscar}" />
+					
+					<p:commandButton value="Nuevo"
+					actionListener="#{usuarioBean.busqueda()}" update="frm:dt" />
 
-						<p:inputText id="txtBuscarUs" value="#{usuarioBean.buscar}"
-							placeholder="Buscar Usuarios" required="true" label="Text 1">
-						</p:inputText>
-						<p:message for="txtBuscarUs" />
-						<h:outputText value="#{usuarioBean.buscar}" />
-
-						<p:commandButton process="frm:txtBuscarUs"
-							update="@form" value="Buscar" />
 					</h:panelGrid>
 				</p:panel>
-
-				<!-- <h:panelGrid id="mpg" columns="3" cellpadding="10">
-					<p:inputText id="txtBuscarUs" placeholder="Buscar Usuarios"
-						required="true" label="Buscar" value="#{usuarioBean.buscar}" />
-					<p:commandButton value="Buscar" actionListener="#{usuarioBean.busqueda()}"
-						update="@form" />
-					<p:message for="txtBuscarUs" />
-				</h:panelGrid> -->
 
 				<p:dataTable id="dt" var="u" value="#{usuarioBean.usuarios}">
 					<p:column headerText="Nombre">
@@ -57,30 +48,28 @@
 					widgetVar="wdlg" modal="true" resizable="false" draggable="true"
 					closeOnEscape="true">
 
-					<h:panelGrid id="pg" columns="2">
-						<h:panelGrid columns="2">
-							<h:outputText value="Usuario" />
-							<p:inputText value="#{usuarioBean.us.usuario}" />
+					<h:panelGrid id="pg" columns="3">
+						<h:outputText value="Usuario" />
+						<p:inputText value="#{usuarioBean.us.usuario}" />
+						<h:column />
 
-							<h:outputText value="Contraseña" />
-							<p:password value="#{usuarioBean.verificar}" />
+						<h:outputText value="Contraseña" />
+						<p:password value="#{usuarioBean.oldPass}" />
+						<p:commandButton value="Verificar"
+							actionListener="#{usuarioBean.verificar()}" update="pg" />
 
+						<!-- <p:outputLabel for="pwd1" value="Nueva Contraseña:" />
+						<p:password id="pwd1" value="#{usuarioBean.us.contrasena}"
+							match="pwd2" label="Password 1" required="true" />
+						<h:column />
 
-							<p:outputLabel for="pwd1" value="Nueva Contraseña: *" />
-							<p:password id="pwd1" value="#{usuarioBean.us.contrasena}"
-								match="pwd2" label="Password 1" required="true" />
+						<p:outputLabel for="pwd2" value="Repetir Contraseña" />
+						<p:password id="pwd2" value="#{usuarioBean.us.contrasena}"
+							label="Password 2" required="true" />
+						<h:column /> -->
 
-
-							<p:outputLabel for="pwd2" value="Repetir Contraseña" />
-							<p:password id="pwd2" value="#{usuarioBean.us.contrasena}"
-								label="Password 2" required="true" />
-						</h:panelGrid>
-						<h:panelGrid>
-							<p:commandButton value="Verificar"
-								actionListener="#{usuarioBean.verificar()}" update="pg" process="pg"/>
-						</h:panelGrid>
-
-						<p:commandButton value="Aceptar" actionListener="#{usuarioBean.modificar()}"
+						<p:commandButton value="Aceptar"
+							action="#{usuarioBean.modificar()}"
 							rendered="#{usuarioBean.verificado}" update="pg" />
 						<p:commandButton value="Cancelar" />
 					</h:panelGrid>

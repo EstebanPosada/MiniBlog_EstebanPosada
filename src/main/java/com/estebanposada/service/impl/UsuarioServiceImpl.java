@@ -15,7 +15,7 @@ public class UsuarioServiceImpl implements Serializable, IUsuarioService {
 
 	@EJB
 	private IUsuarioDAO dao;
-	
+
 	@Override
 	public Integer registrar(Usuario t) throws Exception {
 		int rpta = dao.registrar(t);
@@ -39,7 +39,6 @@ public class UsuarioServiceImpl implements Serializable, IUsuarioService {
 		// TODO Auto-generated method stub
 		return dao.listarPorId(t);
 	}
-	
 
 	@Override
 	public List<Usuario> listarPorUsuario(String bus) {
@@ -50,9 +49,9 @@ public class UsuarioServiceImpl implements Serializable, IUsuarioService {
 	@Override
 	public Usuario login(Usuario us) {
 		String clave = us.getContrasena();
-		
+
 		String claveHash = dao.traerPassHashed(us.getUsuario());
-		if(BCrypt.checkpw(clave, claveHash)) {
+		if (BCrypt.checkpw(clave, claveHash)) {
 			us.setContrasena(claveHash);
 			return dao.login(us);
 		}
@@ -61,12 +60,11 @@ public class UsuarioServiceImpl implements Serializable, IUsuarioService {
 
 	@Override
 	public boolean verificar(String pass, Usuario us) {
-		//String myClaveHash = BCrypt.hashpw(pass, BCrypt.gensalt());
-		if(BCrypt.checkpw(pass, us.getContrasena())) {
-		return true;
+		// String myClaveHash = BCrypt.hashpw(pass, BCrypt.gensalt());
+		if (BCrypt.checkpw(pass, us.getContrasena())) {
+			return true;
 		}
 		return false;
 	}
-
 
 }
