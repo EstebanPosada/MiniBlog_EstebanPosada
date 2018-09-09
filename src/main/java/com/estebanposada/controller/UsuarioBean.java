@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.estebanposada.model.Persona;
 import com.estebanposada.model.Usuario;
 import com.estebanposada.service.IUsuarioService;
@@ -52,6 +54,7 @@ public class UsuarioBean implements Serializable {
 	}
 	
 	public void mostrarData(Usuario us) {
+		this.verificado = false;
 		this.us = us;
 	}
 	
@@ -63,9 +66,6 @@ public class UsuarioBean implements Serializable {
 		}
 	}
 	
-	public void limpiarControles() {
-		//this.us = new Usuario();
-	}
 	
 	public void verificar() {
 		this.verificado = this.usuarioService.verificar(this.oldPass, this.us);
@@ -73,6 +73,10 @@ public class UsuarioBean implements Serializable {
 	
 	public void modificar() {
 		try {
+			String clave = this.nuevoPass;
+			String claveHash = BCrypt.hashpw(clave, BCrypt.gensalt());
+			
+			this.us.setContrasena(claveHash);
 			this.usuarioService.modificar(this.us);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

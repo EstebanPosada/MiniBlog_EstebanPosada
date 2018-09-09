@@ -38,7 +38,8 @@ public class IndexBean implements Serializable {
 			if (us != null && us.getEstado().equalsIgnoreCase("A")) {
 				// Almacenar en la sesión de JSF
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", us);
-				redireccion = "/protegido/roles?faces-redirect=true";
+				//redireccion = "/protegido/roles?faces-redirect=true";
+				redireccion = "/protegido/usuarios?faces-redirect=true";
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales incorrectas"));

@@ -14,18 +14,20 @@
 		<ui:define name="content">
 
 			<h:form id="frm">
+				<p:growl autoUpdate="true" showDetail="true" />
 				<h1>Usuarios</h1>
 
 				<p:panel>
 
 					<h:panelGrid id="pgb" columns="4" cellpadding="5">
-					
-					<p:inputText id="txtBuscar" value="#{usuarioBean.buscar}" placeholder="Buscar Usuario" />
-					<p:message for="txtBuscar" />
-					<h:outputText value="#{usuarioBean.buscar}" />
-					
-					<p:commandButton value="Nuevo"
-					actionListener="#{usuarioBean.busqueda()}" update="frm:dt" />
+
+						<p:inputText id="txtBuscar" value="#{usuarioBean.buscar}"
+							placeholder="Buscar Usuario" />
+						<p:message for="txtBuscar" />
+						<h:outputText value="#{usuarioBean.buscar}" />
+
+						<p:commandButton value="Buscar"
+							actionListener="#{usuarioBean.busqueda()}" update="frm:dt" />
 
 					</h:panelGrid>
 				</p:panel>
@@ -53,10 +55,13 @@
 						<p:inputText value="#{usuarioBean.us.usuario}" />
 						<h:column />
 
-						<h:outputText value="Contraseña" />
-						<p:password value="#{usuarioBean.oldPass}" />
+						<h:outputText value="Contraseña"
+							rendered="#{!usuarioBean.verificado}" />
+						<p:password value="#{usuarioBean.oldPass}"
+							rendered="#{!usuarioBean.verificado}" />
 						<p:commandButton value="Verificar"
-							actionListener="#{usuarioBean.verificar()}" update="pg" />
+							actionListener="#{usuarioBean.verificar()}"
+							rendered="#{!usuarioBean.verificado}" update="pg" />
 
 						<!-- <p:outputLabel for="pwd1" value="Nueva Contraseña:" />
 						<p:password id="pwd1" value="#{usuarioBean.us.contrasena}"
@@ -68,12 +73,28 @@
 							label="Password 2" required="true" />
 						<h:column /> -->
 
-						<p:commandButton value="Aceptar"
-							action="#{usuarioBean.modificar()}"
-							rendered="#{usuarioBean.verificado}" update="pg" />
-						<p:commandButton value="Cancelar" />
+						<h:outputText value="Nueva Contraseña"
+							rendered="#{usuarioBean.verificado}" />
+						<p:password value="#{usuarioBean.nuevoPass}"
+							rendered="#{usuarioBean.verificado}" />
+						<h:column />
+
+
+						<!-- <h:outputText value="Confirma Contraseña" />
+						<p:password value="#{usuarioBean.nuevoPass}" />
+						<h:column /> -->
+
+						<f:facet id="footer" name="footer">
+							<p:commandButton value="Aceptar"
+								action="#{usuarioBean.modificar()}"
+								rendered="#{usuarioBean.verificado}"
+								oncomplete="PF('wdlg').hide()" update="pg" />
+							<p:commandButton value="Cancelar" onclick="PF('wdlg').hide()" />
+						</f:facet>
 					</h:panelGrid>
+
 				</p:dialog>
+
 
 			</h:form>
 
