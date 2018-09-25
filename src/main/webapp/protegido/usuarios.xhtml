@@ -41,7 +41,8 @@
 					</p:column>
 					<p:column headerText="">
 						<p:commandButton value="Modificar" oncomplete="PF('wdlg').show()"
-							actionListener="#{usuarioBean.mostrarData(u)}" update="frm:dlg" />
+							actionListener="#{usuarioBean.mostrarData(u)}" update="frm:dlg"
+							immediate="true" />
 					</p:column>
 				</p:dataTable>
 
@@ -50,51 +51,59 @@
 					widgetVar="wdlg" modal="true" resizable="false" draggable="true"
 					closeOnEscape="true">
 
-					<h:panelGrid id="pg" columns="3">
+					<h:panelGrid id="pg_user" columns="3" rendered = "#{not empty usuarioBean.us.usuario}" >
 						<h:outputText value="Usuario" />
 						<p:inputText value="#{usuarioBean.us.usuario}" />
 						<h:column />
+					</h:panelGrid>
 
+					<h:panelGrid id="pg" columns="3">
 						<h:outputText value="Contraseña"
 							rendered="#{!usuarioBean.verificado}" />
 						<p:password value="#{usuarioBean.oldPass}"
 							rendered="#{!usuarioBean.verificado}" />
 						<p:commandButton value="Verificar"
 							actionListener="#{usuarioBean.verificar()}"
-							rendered="#{!usuarioBean.verificado}" update="pg" />
+							rendered="#{!usuarioBean.verificado}" update="pg_facet" />
 
-						<!-- <p:outputLabel for="pwd1" value="Nueva Contraseña:" />
-						<p:password id="pwd1" value="#{usuarioBean.us.contrasena}"
-							match="pwd2" label="Password 1" required="true" />
-						<h:column />
-
-						<p:outputLabel for="pwd2" value="Repetir Contraseña" />
-						<p:password id="pwd2" value="#{usuarioBean.us.contrasena}"
-							label="Password 2" required="true" />
-						<h:column /> -->
-
-						<h:outputText value="Nueva Contraseña"
+						
+							<!-- <h:outputText value="Nueva Contraseña"
 							rendered="#{usuarioBean.verificado}" />
 						<p:password value="#{usuarioBean.nuevoPass}"
 							rendered="#{usuarioBean.verificado}" />
-						<h:column />
+						<h:column />  -->
 
 
-						<!-- <h:outputText value="Confirma Contraseña" />
+							<!-- <h:outputText value="Confirma Contraseña" />
 						<p:password value="#{usuarioBean.nuevoPass}" />
 						<h:column /> -->
 
-						<f:facet id="footer" name="footer">
-							<p:commandButton value="Aceptar"
-								action="#{usuarioBean.modificar()}"
-								rendered="#{usuarioBean.verificado}"
-								oncomplete="PF('wdlg').hide()" update="pg" />
+							<!-- 						<f:facet id="footer" name="footer"> -->
+							
+							<!-- 						</f:facet> -->
+						</h:panelGrid>
+						<p:panelGrid id="pg_paswwords">
+							<p:outputLabel for="pwd1" value="Nueva Contraseña:" />
+							<p:password id="pwd1" value="#{usuarioBean.us.contrasena}"
+								match="pwd2" label="Password 1" required="true" />
+							<h:column />
+
+							<p:outputLabel for="pwd2" value="Repetir Contraseña" />
+							<p:password id="pwd2" value="#{usuarioBean.us.contrasena}"
+								label="Password 2" required="true" />
+							<h:column />
+						</p:panelGrid>
+						<p:panelGrid id="pg_facet">
+								<p:commandButton value="Aceptar"
+									action="#{usuarioBean.modificar()}"
+									rendered="#{usuarioBean.verificado}"
+									oncomplete="PF('wdlg').hide()" update="pg_paswwords" />
+
+								<!-- 								<p:commandButton value="Cancelar" onclick="PF('wdlg').hide()"/> -->
+							</p:panelGrid>
 							<p:commandButton value="Cancelar" onclick="PF('wdlg').hide()" />
-						</f:facet>
-					</h:panelGrid>
-
-				</p:dialog>
-
+						</p:dialog>
+						
 
 			</h:form>
 
